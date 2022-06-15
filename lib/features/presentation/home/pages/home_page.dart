@@ -9,6 +9,7 @@ import 'package:sqflite_example/core/utils/constants.dart';
 import 'package:sqflite_example/di/injector.dart';
 import 'package:sqflite_example/features/data/model/note_model.dart';
 import 'package:sqflite_example/features/presentation/home/bloc/note_list_bloc/note_list_bloc.dart';
+import 'package:sqflite_example/features/presentation/home/widget/refresh_button_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -33,27 +34,27 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       appBar: AppBar(
         title: const Text("Home Screen"),
         actions: [
-          IconButton(
-              onPressed: () {
-                //TODO: Need to implement tween animation on press and refresh the firebase data
-              },
-              icon: const Icon(Icons.sync)),
+          RefreshButtonWidget(
+              onPressed: () => noteListBloc.add(GetNoteListEvent())),
           const AddButton(),
         ],
       ),
       body: BlocBuilder<NoteListBloc, NoteListState>(
         bloc: noteListBloc,
         builder: (context, NoteListState state) {
-          if (state is NoteListInitialState || state is NoteListLoadingState) {
-            return _buildLoadingWidget();
-          } else if (state is NoteListEmptyState) {
-            return _buildEmptyWidget();
-          } else if (state is NoteListSuccessState) {
-            return _buildListWidget(noteListBloc.noteList);
-          } else if (state is NoteListFailureState) {
-            return _buildFailureWidget();
-          } else {
-            return const Text("Unknown - state");
+          switch (state.runtimeType) {
+            case NoteListInitialState:
+              return const _BuildLoadingWidget();
+            case NoteListLoadingState:
+              return const _BuildLoadingWidget();
+            case NoteListEmptyState:
+              return const _BuildEmptyWidget();
+            case NoteListSuccessState:
+              return _buildListWidget(noteListBloc.noteList);
+            case NoteListFailureState:
+              return const _BuildFailureEvent();
+            default:
+              return const Center(child: Text("Unknown - Error"));
           }
         },
       ),
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Widget _buildListWidget(List<NoteModel> noteList) {
     return AnimatedList(
-      key: Constants.listKey,
+      key: noteListBloc.listKey,
       initialItemCount: noteList.length,
       itemBuilder: (context, index, animation) {
         return SlideTransition(
@@ -75,7 +76,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             note: noteList[index],
             onDelete: () async {
               //Animate and delete from the database
-              Constants.listKey.currentState?.removeItem(
+              noteListBloc.listKey.currentState?.removeItem(
                 noteList.indexOf(noteList[index]),
                 (_, animation) {
                   return _slide(animation, NoteTile(note: noteList[index]));
@@ -102,8 +103,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       child: child,
     );
   }
+}
 
-  Widget _buildLoadingWidget() {
+class _BuildLoadingWidget extends StatelessWidget {
+  const _BuildLoadingWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
       child: Lottie.network(
         Constants.loadingURL,
@@ -111,17 +117,27 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
     );
   }
+}
 
-  Widget _buildEmptyWidget() {
+class _BuildFailureEvent extends StatelessWidget {
+  const _BuildFailureEvent({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text("Sorry, Something went wrong :("));
+  }
+}
+
+class _BuildEmptyWidget extends StatelessWidget {
+  const _BuildEmptyWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
       child: Lottie.network(
         Constants.emptyURL,
         height: 160.h,
       ),
     );
-  }
-
-  Widget _buildFailureWidget() {
-    return const Center(child: Text("Sorry, Something went wrong :("));
   }
 }

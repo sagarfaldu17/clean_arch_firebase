@@ -18,12 +18,12 @@ class NoteRepositoryImpl implements NoteRepository {
       ResponseWrapper<BaseResponse> baseResponse =
           await noteDataSource.addNote(noteModel);
       if (baseResponse.hasException) {
-        return Left(ServerFailure(message: baseResponse.getException.message));
+        return left(ServerFailure(message: baseResponse.getException.message));
       } else {
         return right(baseResponse.getData);
       }
     } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
+      return left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -34,12 +34,12 @@ class NoteRepositoryImpl implements NoteRepository {
       ResponseWrapper<BaseResponse> baseResponse =
           await noteDataSource.deleteNote(noteRequestModel);
       if (baseResponse.hasException) {
-        return Left(ServerFailure(message: baseResponse.getException.message));
+        return left(ServerFailure(message: baseResponse.getException.message));
       } else {
         return right(baseResponse.getData);
       }
     } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
+      return left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -49,12 +49,12 @@ class NoteRepositoryImpl implements NoteRepository {
       ResponseWrapper<BaseResponse> baseResponse =
           await noteDataSource.getNotes();
       if (baseResponse.hasException) {
-        return Left(ServerFailure(message: baseResponse.getException.message));
+        return left(ServerFailure(message: baseResponse.getException.message));
       } else {
         return right(baseResponse.getData);
       }
     } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
+      return left(ServerFailure(message: e.toString()));
     }
   }
 

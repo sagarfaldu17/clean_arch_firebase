@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  //keys
-  static final GlobalKey<AnimatedListState> listKey =
-      GlobalKey<AnimatedListState>();
+  static const String collectionNotes = "notes";
 
   //URLs
   static const String loadingURL =

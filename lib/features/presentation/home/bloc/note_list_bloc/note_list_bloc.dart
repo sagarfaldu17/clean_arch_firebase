@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:sqflite_example/core/error/failures.dart';
-import 'package:sqflite_example/core/utils/constants.dart';
 import 'package:sqflite_example/features/data/model/note_model.dart';
 import 'package:sqflite_example/features/data/model/note_request_model.dart';
 import 'package:sqflite_example/features/domain/usecases/note_module/delete_note_usecase.dart';
@@ -12,6 +12,7 @@ part 'note_list_event.dart';
 part 'note_list_state.dart';
 
 class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
+  final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   final GetNotes getNotesUseCase;
   final DeleteNote deleteNoteUseCase;
   List<NoteModel> noteList = [];
@@ -26,10 +27,14 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     on<NoteListFailureEvent>((event, emit) => emit(NoteListFailureState()));
     on<DeleteNoteEvent>((event, emit) => _deleteNote(event.noteRequestModel));
   }
+}
 
-  _getNoteList() {
+extension GetNoteListExtention on NoteListBloc {
+  _getNoteList() async {
     try {
       add(NoteListLoadingEvent());
+      //TODO: Remove delay after testing tween rotation
+      await Future.delayed(const Duration(seconds: 1));
       getNotesUseCase().then((result) {
         result.fold((Failure left) {
           add(NoteListFailureEvent(getFailureMessage(left)));
@@ -45,15 +50,19 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
       add(NoteListFailureEvent(e.toString()));
     }
   }
+}
 
+extension AddNewNoteExtention on NoteListBloc {
   _addNewNote(NoteModel note) {
     //add element in animated list using listKey
-    Constants.listKey.currentState?.insertItem(noteList.length);
+    listKey.currentState?.insertItem(noteList.length);
     add(NoteListLoadingEvent());
     noteList.add(note);
     add(NoteListSuccessEvent());
   }
+}
 
+extension DeleteNoteExtention on NoteListBloc {
   _deleteNote(NoteRequestModel noteRequestModel) {
     deleteNoteUseCase(noteRequestModel).then((result) {
       result.fold((Failure left) {
