@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sqflite_example/core/base/base_response.dart';
+import 'package:sqflite_example/core/utils/constants.dart';
 import 'package:sqflite_example/features/data/model/note_model.dart';
 
 class FirebaseHelper {
   FirebaseFirestore fs = FirebaseFirestore.instance;
-  static const String collectionNotes = "notes";
 
   CollectionReference getNotesCollection() {
-    return fs.collection(collectionNotes);
+    return fs.collection(Constants.collectionNotes);
   }
 
   Future<BaseResponse<dynamic>> addNote(NoteModel noteModel) async {

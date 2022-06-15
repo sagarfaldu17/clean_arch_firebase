@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-class NoteEntity extends Equatable {
+class NoteEntity {
   const NoteEntity(
     this.id,
     this.uid,
@@ -18,8 +16,4 @@ class NoteEntity extends Equatable {
   final int? priority;
   final DateTime? date;
   final bool? isDeleted;
-
-  @override
-  // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
 }

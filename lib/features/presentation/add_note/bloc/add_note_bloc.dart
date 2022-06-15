@@ -22,7 +22,9 @@ class AddNoteBloc extends Bloc<AddNoteEvent, AddNoteState> {
     on<AddNoteSuccessEvent>((event, emit) => emit(AddNoteSuccessState()));
     on<AddNoteSubmitEvent>((event, emit) => _submitNote(event.note));
   }
+}
 
+extension SubmitNote on AddNoteBloc {
   _submitNote(NoteModel note) {
     try {
       add(AddNoteLoadingEvent());
