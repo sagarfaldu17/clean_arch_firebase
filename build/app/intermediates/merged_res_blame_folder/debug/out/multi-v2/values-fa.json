@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/mind/StudioProjects/sqflite_example/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-fa/values-fa.xml",
+            "outputFile": "/Users/mind/Documents/flutter_projects/clean_arch_firebase/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-fa/values-fa.xml",
             "map": [
                 {
                     "source": "/Users/mind/.gradle/caches/transforms-3/7e84265d8ce5c421a078a95356e73306/transformed/jetified-play-services-basement-18.0.0/res/values-fa/values.xml",

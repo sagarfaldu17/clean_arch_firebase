@@ -47,6 +47,7 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   }
 
   _addNewNote(NoteModel note) {
+    //add element in animated list using listKey
     Constants.listKey.currentState?.insertItem(noteList.length);
     add(NoteListLoadingEvent());
     noteList.add(note);

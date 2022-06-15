@@ -74,16 +74,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             key: Key(index.toString()),
             note: noteList[index],
             onDelete: () async {
+              //Animate and delete from the database
               Constants.listKey.currentState?.removeItem(
                 noteList.indexOf(noteList[index]),
                 (_, animation) {
-                  return SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(-2, 0),
-                      end: const Offset(0.0, 0.0),
-                    ).animate(animation),
-                    child: NoteTile(note: noteList[index]),
-                  );
+                  return _slide(animation, NoteTile(note: noteList[index]));
                 },
                 duration: const Duration(milliseconds: 400),
               );
@@ -98,10 +93,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
+  SlideTransition _slide(Animation<double> animation, Widget child) {
+    return SlideTransition(
+      position: Tween<Offset>(
+        begin: const Offset(-2, 0),
+        end: const Offset(0.0, 0.0),
+      ).animate(animation),
+      child: child,
+    );
+  }
+
   Widget _buildLoadingWidget() {
     return Center(
       child: Lottie.network(
-        "https://assets9.lottiefiles.com/packages/lf20_p8bfn5to.json",
+        Constants.loadingURL,
         height: 160.h,
       ),
     );
@@ -110,7 +115,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget _buildEmptyWidget() {
     return Center(
       child: Lottie.network(
-        "https://assets5.lottiefiles.com/packages/lf20_dmw3t0vg.json",
+        Constants.emptyURL,
         height: 160.h,
       ),
     );
