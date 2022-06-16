@@ -34,7 +34,7 @@ extension GetNoteListExtention on NoteListBloc {
     try {
       add(NoteListLoadingEvent());
       //TODO: Remove delay after testing tween rotation
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 3));
       getNotesUseCase().then((result) {
         result.fold((Failure left) {
           add(NoteListFailureEvent(getFailureMessage(left)));

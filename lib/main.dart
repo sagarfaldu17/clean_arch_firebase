@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sqflite_example/custom_painter.dart';
 import 'package:sqflite_example/di/injector.dart';
 import 'package:sqflite_example/features/presentation/add_note/bloc/add_note_bloc.dart';
 import 'package:sqflite_example/features/presentation/home/bloc/note_list_bloc/note_list_bloc.dart';
