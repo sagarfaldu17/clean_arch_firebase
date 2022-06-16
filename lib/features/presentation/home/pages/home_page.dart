@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sqflite_example/features/data/model/note_request_model.dart';
+import 'package:sqflite_example/features/presentation/add_note/widget/success_widget.dart';
+import 'package:sqflite_example/features/presentation/add_note/widget/success_widget_2.dart';
 import 'package:sqflite_example/features/presentation/home/widget/add_button_widget.dart';
+import 'package:sqflite_example/features/presentation/home/widget/loader_widget.dart';
 import 'package:sqflite_example/features/presentation/home/widget/note_tile_widget.dart';
 import 'package:sqflite_example/core/utils/constants.dart';
 import 'package:sqflite_example/di/injector.dart';
@@ -44,9 +47,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         builder: (context, NoteListState state) {
           switch (state.runtimeType) {
             case NoteListInitialState:
-              return const _BuildLoadingWidget();
+              return const LoaderWidget();
             case NoteListLoadingState:
-              return const _BuildLoadingWidget();
+              return const LoaderWidget();
             case NoteListEmptyState:
               return const _BuildEmptyWidget();
             case NoteListSuccessState:
@@ -101,20 +104,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         end: const Offset(0.0, 0.0),
       ).animate(animation),
       child: child,
-    );
-  }
-}
-
-class _BuildLoadingWidget extends StatelessWidget {
-  const _BuildLoadingWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Lottie.network(
-        Constants.loadingURL,
-        height: 160.h,
-      ),
     );
   }
 }
